@@ -1,0 +1,8 @@
+import json
+
+with open('data.jsonl', 'r', encoding='utf-8') as infile, open('train.txt', 'w', encoding='utf-8') as outfile:
+    for line in infile:
+        example = json.loads(line)
+        prompt = example.get('prompt', '')
+        completion = example.get('completion', '')
+        outfile.write(f"{prompt}{completion}\n\n")  # two new lines to separate examples
