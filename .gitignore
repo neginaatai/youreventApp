@@ -12,10 +12,14 @@ model_cache/
 *.tar
 *.zip
 
-# --- Python ---
+# --- Python cache & environment ---
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# --- Virtual environments ---
 .env/
 venv/
+.venv/
+env/
