@@ -6,9 +6,10 @@ import re
 app = Flask(__name__)
 
 # Load model and tokenizer once at startup
-model_path = "./gpt2-finetuned"
-tokenizer = GPT2Tokenizer.from_pretrained(model_path)
-model = GPT2LMHeadModel.from_pretrained(model_path)
+#replace with the new one t hugging face repo name
+hf_model_name = "neginaatai/event-gpt2"
+tokenizer = GPT2Tokenizer.from_pretrained(hf_model_name="./model_cache")
+model = GPT2LMHeadModel.from_pretrained(hf_model_name"./model_cache")
 
 @app.route('/generate-invitation', methods=['POST'])
 def generate_invitation():
