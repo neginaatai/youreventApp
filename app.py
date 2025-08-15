@@ -1,17 +1,21 @@
 from flask import Flask, request, jsonify
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
-from huggingface_hub import hf_hub_download
+import os
 
 app = Flask(__name__)
 
-# Hugging Face repo
 hf_model_name = "neginaatai/event-gpt2"
 
-# Download model files at runtime if not present
+# Load tokenizer & model efficiently
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(hf_model_name)
-    model = GPT2LMHeadModel.from_pretrained(hf_model_name)
+    model = GPT2LMHeadModel.from_pretrained(
+        hf_model_name,
+        device_map="auto",
+        torch_dtype=torch.float16,
+        low_cpu_mem_usage=True
+    )
     model.eval()
 except Exception as e:
     print(f"Error loading model: {e}")
@@ -24,9 +28,7 @@ def generate_invitation():
         if not data or "prompt" not in data:
             return jsonify({"error": "Missing 'prompt' in request"}), 400
 
-        prompt = data["prompt"]
-        inputs = tokenizer(prompt, return_tensors="pt")
-
+        inputs = tokenizer(data["prompt"], return_tensors="pt")
         outputs = model.generate(
             **inputs,
             max_length=150,
@@ -42,4 +44,5 @@ def generate_invitation():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
