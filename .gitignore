@@ -1,5 +1,14 @@
-# Ignore large model files
+# Ignore fine-tuned model checkpoints
+gpt2-finetuned/
 gpt2-finetuned/checkpoint-*
+
+# Ignore Hugging Face cache
 model_cache/
+
+# Ignore large model files
 *.safetensors
 *.pt
+*.bin
+*.ckpt
+*.tar
+*.zip
